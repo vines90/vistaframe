@@ -1,0 +1,308 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-geist-sans);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-destructive: var(--destructive);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+}
+
+:root {
+  /* DERCHI-inspired exporter theme (VistaFrame branded) */
+  --primary: #171717;
+  --primary-foreground: #fafaf9;
+  --primary-light: #404040;
+  --primary-dark: #0a0a0a;
+
+  --accent: #b45309;
+  --accent-gold: #d4a853;
+  --accent-foreground: #ffffff;
+  --accent-light: #d97706;
+  --accent-dark: #92400e;
+
+  --background: #f5f5f4;
+  --foreground: #1c1917;
+
+  --card: #ffffff;
+  --card-foreground: #1c1917;
+
+  --popover: #ffffff;
+  --popover-foreground: #1c1917;
+
+  --secondary: #e7e5e4;
+  --secondary-foreground: #292524;
+
+  --muted: #e7e5e4;
+  --muted-foreground: #78716c;
+
+  --border: #d6d3d1;
+  --input: #d6d3d1;
+  --ring: #b45309;
+
+  --destructive: #dc2626;
+
+  --radius: 2px;
+
+  --derchi-dark: #0f0f0f;
+  --derchi-muted: #1a1a1a;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /** DERCHY-style section label */
+  .derchi-eyebrow {
+    @apply font-sans text-xs font-semibold uppercase tracking-[0.28em];
+    color: var(--accent-gold);
+  }
+
+  /** Italic nav treatment */
+  .derchi-nav-link {
+    @apply italic text-neutral-900 no-underline transition-colors hover:text-neutral-900/80;
+    font-weight: 500;
+  }
+
+  /** Transparent header over hero (home / top of page) */
+  header[data-hero-overlay="true"] .derchi-nav-link {
+    @apply !text-white !no-underline hover:!text-white/85;
+  }
+  header[data-hero-overlay="true"] .hero-nav-trigger {
+    @apply !text-white hover:!bg-white/10 hover:!text-white focus:!bg-white/10 focus:!text-white data-[active]:!bg-transparent data-[state=open]:!bg-white/15 [&_svg]:!text-white;
+  }
+
+  /** Gold rule under titles */
+  .derchi-title-rule {
+    @apply relative inline-block pb-3;
+  }
+  .derchi-title-rule::after {
+    content: "";
+    @apply absolute bottom-0 left-0 h-0.5 w-12 rounded-sm;
+    background: linear-gradient(90deg, var(--accent-gold), var(--accent));
+  }
+
+  /* Animation utilities */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s ease-out forwards;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.3s ease-out forwards;
+  }
+
+  .animate-fade-in-up {
+    animation: slideUp 0.65s ease-out forwards;
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes kenBurns {
+  from {
+    transform: scale(1.05);
+  }
+  to {
+    transform: scale(1.12);
+  }
+}
+
+.animate-ken-burns {
+  animation: kenBurns 18s ease-in-out alternate infinite;
+  transform-origin: center;
+}
+
+/* Hero — fine dot overlay (竞品站常见的技术感肌理) */
+.hero-dot-matrix {
+  background-image: radial-gradient(
+    circle at center,
+    rgba(255, 255, 255, 0.11) 0.85px,
+    transparent 1.1px
+  );
+  background-size: 22px 22px;
+}
+
+/* Logo wall / horizon line subtle drift (motion-safe hero only) */
+@keyframes heroLineDrift {
+  0% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 0.42;
+    transform: translateY(-3px);
+  }
+  100% {
+    opacity: 0.25;
+    transform: translateY(0);
+  }
+}
+
+.animate-hero-line-drift {
+  animation: heroLineDrift 8s ease-in-out infinite;
+}
+
+/* Certification marquee — competitors often use infinite trust strips */
+@keyframes marquee-x {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-33.333%);
+  }
+}
+
+.animate-marquee-x {
+  animation: marquee-x 44s linear infinite;
+}
+
+.motion-safe\:pause-on-hover:hover {
+  animation-play-state: paused;
+}
+
+/* Section texture — blueprint / grid (工程蓝图隐喻) */
+.bg-blueprint-soft {
+  background-color: var(--background);
+  background-image: linear-gradient(
+      rgba(26, 54, 93, 0.04) 1px,
+      transparent 1px
+    ),
+    linear-gradient(90deg, rgba(26, 54, 93, 0.04) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+
+/* Process connector shimmer */
+@keyframes connectorPulse {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: translateX(-2px);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(2px);
+  }
+}
+
+.animate-connector-dot {
+  animation: connectorPulse 2.8s ease-in-out infinite;
+}
+
+
+
+@keyframes pulse-slow-ring {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.88;
+    transform: scale(1.024);
+  }
+}
+
+@keyframes pulse-slower-ring {
+  0%,
+  100% {
+    opacity: 0.45;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.78;
+    transform: scale(1.04);
+  }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .animate-marquee-x,
+  .animate-connector-dot,
+  .animate-hero-line-drift {
+    animation: none !important;
+  }
+
+  .animate-ken-burns {
+    animation: none !important;
+    transform: scale(1.05);
+  }
+}

@@ -1,0 +1,89 @@
+{
+  "brand_style": "Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+  "images": [
+    {
+      "filename": "hero.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/hero.jpg",
+      "prompt": "Modern luxury living room interior with floor-to-ceiling aluminum bifold doors opening to a panoramic ocean view. Sleek black-framed glass doors creating seamless indoor-outdoor flow. Minimalist contemporary architecture. Sunset golden hour lighting. High-end residential architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "1920x1080"
+    },
+    {
+      "filename": "products/windows/category.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/products/windows/category.jpg",
+      "prompt": "Modern casement aluminum windows on contemporary house exterior. Sleek dark gray aluminum frames with large glass panes. Clean architectural lines. Blue sky background. Professional product photography. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "products/doors/category.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/products/doors/category.jpg",
+      "prompt": "Grand modern aluminum entry door with sidelights. Dark charcoal frame, frosted glass panels. Contemporary villa entrance. Stone facade. Professional architectural photography. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "products/sunroom/category.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/products/sunroom/category.jpg",
+      "prompt": "Modern glass sunroom conservatory attached to luxury home. Aluminum frame structure with transparent glass roof. Indoor garden with comfortable furniture. Natural daylight flooding in. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "products/wooden-doors/category.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/products/wooden-doors/category.jpg",
+      "prompt": "Premium solid wood interior door with modern aluminum frame accents. Walnut wood grain texture with sleek metal handle. Minimalist luxury residential setting. Warm ambient lighting. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/hilton-la-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/hilton-la-1.jpg",
+      "prompt": "Hilton hotel exterior facade with modern aluminum curtain wall windows. Downtown Los Angeles skyscraper. Glass and steel architecture. Blue hour twilight photography. Urban luxury. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/beverly-hills-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/beverly-hills-1.jpg",
+      "prompt": "Beverly Hills luxury villa with expansive glass sliding doors opening to infinity pool. Indoor-outdoor living space. Palm trees, sunset sky. High-end residential architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/dubai-marina-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/dubai-marina-1.jpg",
+      "prompt": "Dubai Marina luxury high-rise residential tower at night. Floor-to-ceiling windows with warm interior lighting. Waterfront reflection. Modern Middle Eastern architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/sydney-harbour-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/sydney-harbour-1.jpg",
+      "prompt": "Sydney waterfront residence with panoramic harbor views. Modern aluminum windows with operable sections. Opera House in background. Natural daylight. Australian contemporary architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/london-business-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/london-business-1.jpg",
+      "prompt": "London modern office building exterior with glass curtain wall. Aluminum window frames in grid pattern. Rainy day, reflections on glass. Contemporary commercial architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/marriott-toronto-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/marriott-toronto-1.jpg",
+      "prompt": "Marriott hotel downtown Toronto exterior. Modern window systems with thermal break technology. Winter scene, snow on window ledges. Urban hospitality architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/singapore-sky-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/singapore-sky-1.jpg",
+      "prompt": "Singapore luxury high-rise condominium with floor-to-ceiling windows. City skyline view, Marina Bay in background. Night photography with interior lights. Tropical modern architecture. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "projects/cape-town-1.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/projects/cape-town-1.jpg",
+      "prompt": "Cape Town coastal resort villa with aluminum folding doors opening to ocean view. Beachfront luxury residence. Atlantic ocean backdrop. Golden hour sunset. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "800x600"
+    },
+    {
+      "filename": "og-image.jpg",
+      "filepath": "/Users/liyang/Documents/Work/MyProject/WEB/\u72ec\u7acb\u7ad9/\u94dd\u5408\u91d1\u95e8\u7a97\u54c1\u724c\u7ad9/vistaframe/public/images/og-image.jpg",
+      "prompt": "VistaFrame aluminum windows and doors brand hero image. Modern architectural scene with elegant glass facade. Professional B2B manufacturing company aesthetic. Clean blue and white color scheme with subtle orange accent. Text space on left side. Professional architectural photography style. Clean, modern aesthetic with cool blue-gray tones matching #1a365d brand color. High-end commercial photography look with soft natural lighting. Ultra-detailed, 4K quality.",
+      "size": "1200x630"
+    }
+  ]
+}
