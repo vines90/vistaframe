@@ -1,13 +1,15 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Search, ChevronDown, Menu, Phone, Mail, MessageCircle, Headphones } from "lucide-react";
+import { Search, ChevronDown, Menu, Phone, Mail, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/content/site";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import type { Locale, Dictionary } from "@/content/i18n";
 
 const productCats = [
   { id: "windows", name: "铝窗系统", items: ["平开窗", "推拉窗", "固定窗"] },
@@ -28,17 +30,10 @@ const resourcesMenu = [
   { name: "国际认证", href: "/resources/certifications" },
 ];
 
-function UkFlag() {
-  return (
-    <svg viewBox="0 0 60 34" width="26" height="14" aria-hidden xmlns="http://www.w3.org/2000/svg">
-      <path fill="#012169" d="M0 0h60v34H0z" />
-      <path fill="#FFF" d="m0 0 60 34M60 0 0 34" stroke="#FFF" strokeWidth="12" strokeLinecap="square" />
-      <path fill="none" stroke="#C8102E" strokeWidth="6.5" d="m0 0 60 34M60 0 0 34" strokeLinecap="square" />
-      <path stroke="#FFF" strokeWidth="16" strokeLinecap="square" d="M30 0v34M0 17h60" />
-      <path stroke="#C8102E" strokeWidth="10" strokeLinecap="square" d="M30 0v34M0 17h60" />
-    </svg>
-  );
-}
+type HeaderProps = {
+  dict: Dictionary;
+  locale: Locale;
+};
 
 interface DropdownProps {
   trigger: React.ReactNode;
@@ -89,9 +84,9 @@ function Dropdown({ trigger, children, align = "left", isOpen, onOpenChange, her
   );
 }
 
-export function Header() {
+export function Header({ locale, dict }: HeaderProps) {
   const pathname = usePathname();
-  const isHome = pathname === "/";
+  const isHome = pathname === "/" || pathname === `/${locale}`;
   const [scrolled, setScrolled] = useState(false);
   const [openDropdown, setOpenDropdown] = useState<string | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -106,9 +101,12 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  // Helper to add locale prefix to paths
+  const lp = (path: string) => path.startsWith("/") ? `/${locale}${path}` : `/${locale}/${path}`;
+
   const NavLink = ({ href, children, isActive }: { href: string; children: React.ReactNode; isActive?: boolean }) => (
     <Link
-      href={href}
+      href={lp(href)}
       className={cn(
         "px-2 py-2 text-[11px] font-semibold uppercase tracking-wide italic transition-colors",
         heroOverlay
@@ -193,7 +191,7 @@ export function Header() {
                   {productCats.map((cat) => (
                     <div key={cat.id}>
                       <Link
-                        href={`/products/${cat.id}`}
+                        href={lp(`/products/${cat.id}`)}
                         className="block text-[14px] font-semibold text-neutral-950 hover:text-amber-800"
                         onClick={() => setOpenDropdown(null)}
                       >
@@ -204,7 +202,7 @@ export function Header() {
                           {cat.items.map((item) => (
                             <li key={item}>
                               <Link
-                                href={`/products/${cat.id}`}
+                                href={lp(`/products/${cat.id}`)}
                                 className="text-sm italic text-stone-600 hover:text-amber-800"
                                 onClick={() => setOpenDropdown(null)}
                               >
@@ -230,7 +228,7 @@ export function Header() {
                   {aboutMenu.map((item) => (
                     <li key={item.name}>
                       <Link
-                        href={item.href}
+                        href={lp(item.href)}
                         className="block px-3 py-2 text-sm italic text-stone-700 hover:bg-stone-100 hover:text-neutral-950"
                         onClick={() => setOpenDropdown(null)}
                       >
@@ -254,7 +252,7 @@ export function Header() {
                   {resourcesMenu.map((item) => (
                     <li key={item.name}>
                       <Link
-                        href={item.href}
+                        href={lp(item.href)}
                         className="block px-3 py-2 text-sm italic text-stone-700 hover:bg-stone-100 hover:text-neutral-950"
                         onClick={() => setOpenDropdown(null)}
                       >
@@ -284,19 +282,9 @@ export function Header() {
               <Search className="h-4 w-4" />
             </button>
 
-            <button
-              type="button"
-              className={cn(
-                "flex items-center gap-1.5 px-2 py-1.5 text-[11px] uppercase",
-                heroOverlay ? "text-white" : "text-neutral-950"
-              )}
-            >
-              <UkFlag />
-              <span className="hidden xl:inline">English</span>
-              <ChevronDown className="h-3 w-3" />
-            </button>
+            <LanguageSwitcher current={locale} variant={heroOverlay ? "light" : "dark"} />
 
-            <Link href="/contact">
+            <Link href={lp("/contact")}>
               <Button
                 size="default"
                 className={cn(
@@ -313,7 +301,7 @@ export function Header() {
 
           {/* Mobile menu */}
           <div className="flex items-center gap-2 lg:hidden">
-            <Link href="/contact">
+            <Link href={lp("/contact")}>
               <Button
                 variant="outline"
                 size="sm"
@@ -343,13 +331,13 @@ export function Header() {
                   VistaFrame
                 </SheetTitle>
                 <div className="mt-8 flex flex-col gap-4">
-                  <Link href="/" className="text-lg italic" onClick={() => setIsMobileMenuOpen(false)}>首页</Link>
+                  <Link href={lp("/")} className="text-lg italic" onClick={() => setIsMobileMenuOpen(false)}>首页</Link>
                   <div className="space-y-2">
                     <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800">产品中心</p>
                     {productCats.map((c) => (
                       <Link
                         key={c.id}
-                        href={`/products/${c.id}`}
+                        href={lp(`/products/${c.id}`)}
                         className="block pl-3 italic text-stone-700"
                         onClick={() => setIsMobileMenuOpen(false)}
                       >
@@ -357,8 +345,8 @@ export function Header() {
                       </Link>
                     ))}
                   </div>
-                  <Link href="/projects" className="text-lg italic" onClick={() => setIsMobileMenuOpen(false)}>工程案例</Link>
-                  <Link href="/contact" className="text-lg italic" onClick={() => setIsMobileMenuOpen(false)}>联系我们</Link>
+                  <Link href={lp("/projects")} className="text-lg italic" onClick={() => setIsMobileMenuOpen(false)}>工程案例</Link>
+                  <Link href={lp("/contact")} className="text-lg italic" onClick={() => setIsMobileMenuOpen(false)}>联系我们</Link>
                 </div>
               </SheetContent>
             </Sheet>
