@@ -1,22 +1,19 @@
 import type { Metadata } from "next";
 import { headers } from "next/headers";
-import { Geist } from "next/font/google";
-import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { siteConfig } from "@/content/site";
 import { defaultLocale, isLocale } from "@/content/i18n";
 
-const geistSans = Geist({
+// 使用系统字体变量（无需下载 Google 字体）
+const fontSans = {
   variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
+  style: { fontFamily: "system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif" },
+};
 
-const playfair = Playfair_Display({
+const fontSerif = {
   variable: "--font-serif",
-  subsets: ["latin"],
-  weight: ["500", "700"],
-  style: ["normal", "italic"],
-});
+  style: { fontFamily: "Georgia, 'Times New Roman', 'Playfair Display', serif" },
+};
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.url),
@@ -64,7 +61,11 @@ export default async function RootLayout({
   return (
     <html
       lang={lang}
-      className={`${geistSans.variable} ${playfair.variable} h-full`}
+      className="h-full"
+      style={{
+        [fontSans.variable]: fontSans.style.fontFamily,
+        [fontSerif.variable]: fontSerif.style.fontFamily,
+      }}
       suppressHydrationWarning
     >
       <body className="min-h-full flex flex-col font-sans">{children}</body>
