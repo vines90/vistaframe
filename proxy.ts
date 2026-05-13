@@ -21,7 +21,7 @@ function localeFromPath(pathname: string): Locale | null {
   return isLocale(seg) ? seg : null;
 }
 
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const { pathname, search } = req.nextUrl;
 
   // Skip API, internals, and any file with an extension.
