@@ -1,12 +1,11 @@
 import { NextResponse } from "next/server";
 
-// Initialize Resend only when needed (not during build)
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
 const getResend = async () => {
   const { Resend } = await import("resend");
   const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) {
-    throw new Error("RESEND_API_KEY is not configured");
-  }
+  if (!apiKey) throw new Error("RESEND_API_KEY is not configured");
   return new Resend(apiKey);
 };
 
@@ -26,19 +25,28 @@ export async function POST(request: Request) {
       email,
       phone,
       message,
-    } = body;
+      locale,
+      _hp,
+    } = body ?? {};
 
-    // Validate required fields
+    // Honeypot — silently succeed for bots.
+    if (typeof _hp === "string" && _hp.trim().length > 0) {
+      return NextResponse.json({ ok: true });
+    }
+
     if (!company || !email || !name) {
       return NextResponse.json(
         { error: "Missing required fields" },
-        { status: 400 }
+        { status: 400 },
       );
     }
+    if (!EMAIL_RE.test(String(email))) {
+      return NextResponse.json({ error: "Invalid email" }, { status: 400 });
+    }
 
-    // Format email content
-    const emailContent = `
+    const html = `
 <h2>New Inquiry from VistaFrame Website</h2>
+<p><strong>Locale:</strong> ${locale ?? "n/a"}</p>
 
 <h3>Company Information</h3>
 <ul>
@@ -70,18 +78,22 @@ export async function POST(request: Request) {
 <h3>Additional Message</h3>
 <p>${message || "None provided"}</p>
 
-<hr>
-<p><em>This inquiry was submitted via the VistaFrame website contact form.</em></p>
-    `.trim();
+<hr />
+<p><em>Submitted via vistaframe.com</em></p>
+`.trim();
 
-    // Initialize Resend and send email
+    if (!process.env.RESEND_API_KEY) {
+      console.log("[contact:dev-mode]", { company, email, name, locale });
+      return NextResponse.json({ ok: true, dev: true });
+    }
+
     const resend = await getResend();
-
-    const { data, error } = await resend.emails.send({
-      from: process.env.LEAD_EMAIL_FROM || "VistaFrame <inquiry@vistaframe.com>",
+    const { error } = await resend.emails.send({
+      from:
+        process.env.LEAD_EMAIL_FROM || "VistaFrame <inquiry@vistaframe.com>",
       to: [process.env.LEAD_EMAIL_TO || "info@vistaframe.com"],
-      subject: `New Inquiry: ${company} - ${productInterest || "General"}`,
-      html: emailContent,
+      subject: `New Inquiry: ${company} — ${productInterest || "General"}`,
+      html,
       replyTo: email,
     });
 
@@ -89,19 +101,16 @@ export async function POST(request: Request) {
       console.error("Resend error:", error);
       return NextResponse.json(
         { error: "Failed to send email" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
-    return NextResponse.json({
-      success: true,
-      message: "Inquiry submitted successfully",
-    });
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error("Contact form error:", error);
+    console.error("contact error", error);
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -1,8 +1,8 @@
 import Image from "next/image";
-import Link from "next/link";
-import { Headphones } from "lucide-react";
 import { siteConfig } from "@/content/site";
 import { HeroContent } from "@/components/HeroContent";
+import type { Locale } from "@/content/i18n";
+import type { Dictionary } from "@/content/i18n/types";
 
 const EXTRA_CERTS = ["AGWA", "Hurricane"];
 
@@ -12,66 +12,45 @@ function certCircleLabel(name: string) {
   return name;
 }
 
-/** DESCHY-style floating quote strip + primary action */
-function FloatingQuotePulse() {
-  return (
-    <div className="pointer-events-none fixed bottom-6 right-4 z-[60] md:bottom-8 md:right-8">
-      <div className="pointer-events-auto flex max-w-[min(100vw-2rem,24rem)] items-center gap-3 sm:gap-4">
-        <div className="rounded-lg border border-neutral-200/90 bg-white/98 px-3.5 py-2.5 shadow-lg shadow-black/20 backdrop-blur-sm sm:px-4 sm:py-3">
-          <p className="text-[13px] font-semibold leading-tight text-neutral-900">
-            {siteConfig.hero.floatingQuoteLead}
-          </p>
-          <p className="mt-1 text-[11px] font-medium uppercase tracking-wide text-neutral-600">
-            {siteConfig.hero.floatingQuoteSub}
-          </p>
-        </div>
-        <Link
-          href="/contact"
-          aria-label={siteConfig.hero.floatingQuoteLead}
-          className="relative flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-[#2563eb] text-white shadow-lg shadow-black/25 transition-[transform,box-shadow] hover:scale-105 hover:shadow-xl"
-        >
-          <Headphones className="h-6 w-6" aria-hidden />
-          <span className="absolute right-2 top-2 h-2 w-2 rounded-full bg-red-500 ring-2 ring-white" aria-hidden />
-        </Link>
-      </div>
-    </div>
-  );
-}
-
-/** Bottom certification band inside hero viewport */
-function HeroCertStrip() {
+function HeroCertStrip({ label }: { label: string }) {
   const certs = [...siteConfig.certifications.map((c) => c.name)];
   EXTRA_CERTS.filter((x) => !certs.includes(x)).forEach((x) => certs.push(x));
-  const row = certs.slice(0, 10);
+  const row = certs.slice(0, 8);
 
   return (
     <div className="relative z-10 w-full shrink-0 border-t border-white/12 bg-neutral-950/88 px-4 py-5 backdrop-blur-md lg:px-10">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-center gap-5 sm:gap-8 lg:justify-between lg:gap-6">
-        {row.map((name) => (
-          <div
-            key={name}
-            className="relative flex h-14 w-14 items-center justify-center rounded-full border-2 border-white/75 bg-transparent text-[9px] font-bold uppercase tracking-tighter text-white shadow-[0_4px_20px_rgba(0,0,0,0.35)] ring-4 ring-black/35 sm:h-16 sm:w-16 sm:text-[10px]"
-            title={name}
-          >
-            <span className="px-1 text-center leading-[1.1]">{certCircleLabel(name)}</span>
-          </div>
-        ))}
+      <div className="mx-auto flex max-w-7xl flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <p className="text-center text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-gold)]/85 lg:text-left">
+          <span className="mr-2 inline-block h-px w-6 align-middle bg-[var(--accent-gold)]/55" aria-hidden />
+          {label}
+        </p>
+        <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-6">
+          {row.map((name) => (
+            <div
+              key={name}
+              className="relative flex h-12 w-12 items-center justify-center rounded-full border-2 border-white/65 bg-transparent text-[9px] font-bold uppercase tracking-tighter text-white shadow-[0_4px_18px_rgba(0,0,0,0.35)] ring-2 ring-black/30 transition-transform hover:-translate-y-0.5 hover:border-[var(--accent-gold)] sm:h-14 sm:w-14 sm:text-[10px]"
+              title={name}
+            >
+              <span className="px-1 text-center leading-[1.1]">{certCircleLabel(name)}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
-export function Hero() {
-  /** Single nav row overlap on homepage (utility bar hidden at top via Header) — matches `components/Header.tsx` main row height */
+type Props = { dict: Dictionary; locale: Locale };
+
+export function Hero({ dict, locale }: Props) {
   const headerOverlapRem = "4.125rem";
 
   return (
     <section className="relative isolate -mt-[4.125rem] min-h-[100dvh] overflow-hidden bg-black">
-      {/* Full-bleed under transparent/fixed stacking: background from top edge of viewport */}
       <div className="absolute inset-0">
         <Image
           src="/images/hero.jpg"
-          alt="VistaFrame aluminum windows and doors in a coastal residence"
+          alt={dict.about?.factoryAlt ?? "VistaFrame aluminum windows and doors"}
           fill
           priority
           sizes="100vw"
@@ -79,32 +58,50 @@ export function Hero() {
           className="object-cover object-center animate-ken-burns"
         />
 
-        {/* Readability: keep architecture visible on left, deepen toward right-aligned type */}
         <div
-          className="absolute inset-0 bg-gradient-to-r from-black/35 via-black/28 to-black/82"
+          className="absolute inset-0 bg-gradient-to-r from-black/45 via-black/30 to-black/85"
           aria-hidden
         />
         <div
           className="absolute inset-y-0 right-0 w-[min(100%,52rem)] bg-gradient-to-l from-neutral-950/55 to-transparent"
           aria-hidden
         />
+        <div className="hero-dot-matrix pointer-events-none absolute inset-0 opacity-[0.13]" aria-hidden />
 
-        <div className="hero-dot-matrix pointer-events-none absolute inset-0 opacity-[0.12]" aria-hidden />
+        {/* Brand crosshair: horizontal + vertical hairlines */}
+        <span
+          className="pointer-events-none absolute top-[calc(4.125rem+5vh)] left-[6%] hidden h-px w-[28%] bg-gradient-to-r from-transparent via-[var(--accent-gold)]/60 to-transparent lg:block"
+          aria-hidden
+        />
+        <span
+          className="pointer-events-none absolute top-[calc(4.125rem+4.6vh)] left-[6%] hidden h-[24vh] w-px bg-gradient-to-b from-[var(--accent-gold)]/60 via-[var(--accent-gold)]/20 to-transparent lg:block"
+          aria-hidden
+        />
+        {/* Brand wordmark frame on left bottom */}
+        <div
+          className="pointer-events-none absolute bottom-[14vh] left-[6%] hidden flex-col gap-2 lg:flex"
+          aria-hidden
+        >
+          <span className="text-[10px] font-semibold uppercase tracking-[0.5em] text-white/60">
+            VistaFrame · 001
+          </span>
+          <span className="font-serif text-[clamp(2rem,4.4vw,3.5rem)] italic text-white/12 leading-none">
+            Precision
+          </span>
+        </div>
       </div>
 
-      <FloatingQuotePulse />
-
       <div
-        className={`relative z-10 mx-auto flex min-h-[100dvh] max-w-[100vw] flex-col`}
+        className="relative z-10 mx-auto flex min-h-[100dvh] max-w-[100vw] flex-col"
         style={{ paddingTop: `calc(${headerOverlapRem})` }}
       >
         <div className="flex min-h-0 flex-1 items-center pb-12 pt-10 sm:pb-14">
           <div className="container mx-auto max-w-[100vw] px-5 lg:px-10 xl:max-w-none">
-            <HeroContent />
+            <HeroContent dict={dict.hero} locale={locale} />
           </div>
         </div>
 
-        <HeroCertStrip />
+        <HeroCertStrip label={dict.hero.certStripLabel} />
       </div>
     </section>
   );

@@ -1,9 +1,9 @@
 import { NextResponse, type NextRequest } from "next/server";
-import { defaultLocale, isLocale, locales } from "@/content/i18n";
+import { defaultLocale, isLocale, locales, type Locale } from "@/content/i18n";
 
 const PUBLIC_FILE = /\.[^/]+$/;
 
-function detectLocale(req: NextRequest): string {
+function detectLocale(req: NextRequest): Locale {
   const cookieLocale = req.cookies.get("NEXT_LOCALE")?.value;
   if (isLocale(cookieLocale)) return cookieLocale;
 
@@ -14,6 +14,11 @@ function detectLocale(req: NextRequest): string {
     if (isLocale(lang)) return lang;
   }
   return defaultLocale;
+}
+
+function localeFromPath(pathname: string): Locale | null {
+  const seg = pathname.split("/").filter(Boolean)[0];
+  return isLocale(seg) ? seg : null;
 }
 
 export function middleware(req: NextRequest) {
@@ -31,10 +36,15 @@ export function middleware(req: NextRequest) {
     return;
   }
 
-  const hasLocale = locales.some(
-    (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
-  );
-  if (hasLocale) return;
+  const inPath = localeFromPath(pathname);
+
+  if (inPath) {
+    // Already locale-prefixed — pass through with x-locale header for layouts.
+    const requestHeaders = new Headers(req.headers);
+    requestHeaders.set("x-locale", inPath);
+    requestHeaders.set("x-pathname", pathname);
+    return NextResponse.next({ request: { headers: requestHeaders } });
+  }
 
   const target = detectLocale(req);
   const url = req.nextUrl.clone();

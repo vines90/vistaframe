@@ -1,43 +1,54 @@
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { ArrowLeft, Home } from "lucide-react";
+import { defaultLocale } from "@/content/i18n";
 
-export default function NotFound() {
+/** Root not-found used only when a path falls outside any [locale] tree. */
+export default function RootNotFound() {
   return (
-    <div className="min-h-[70vh] flex items-center justify-center bg-[#f7fafc]">
-      <div className="text-center px-4">
-        <h1 className="text-6xl md:text-8xl font-bold text-[#1a365d] mb-4">
-          404
-        </h1>
-        <h2 className="text-2xl md:text-3xl font-semibold text-[#1a202c] mb-4">
-          Page Not Found
-        </h2>
-        <p className="text-[#718096] max-w-md mx-auto mb-8">
-          Sorry, we couldn&apos;t find the page you&apos;re looking for. It might have
-          been moved or deleted.
-        </p>
-        <div className="flex flex-wrap justify-center gap-4">
-          <Button
-            asChild
-            variant="outline"
-            className="rounded-sm border-[#1a365d] text-[#1a365d] hover:bg-[#1a365d] hover:text-white"
+    <html lang={defaultLocale}>
+      <body
+        style={{
+          margin: 0,
+          minHeight: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          fontFamily: "system-ui, sans-serif",
+          background: "#0f0f0f",
+          color: "#f5f5f4",
+        }}
+      >
+        <main style={{ textAlign: "center", padding: 24 }}>
+          <p
+            style={{
+              fontSize: 12,
+              letterSpacing: "0.32em",
+              color: "#d4a853",
+              textTransform: "uppercase",
+            }}
           >
-            <Link href="/">
-              <ArrowLeft className="mr-2 h-4 w-4" />
-              Go Back
+            VistaFrame
+          </p>
+          <h1 style={{ fontSize: 64, margin: "16px 0", fontWeight: 800 }}>404</h1>
+          <p style={{ color: "#a8a29e" }}>The page you requested could not be found.</p>
+          <p style={{ marginTop: 24 }}>
+            <Link
+              href={`/${defaultLocale}`}
+              style={{
+                color: "#0f0f0f",
+                background: "#d4a853",
+                padding: "10px 18px",
+                textDecoration: "none",
+                fontSize: 12,
+                letterSpacing: "0.22em",
+                textTransform: "uppercase",
+                fontWeight: 700,
+              }}
+            >
+              Back to home
             </Link>
-          </Button>
-          <Button
-            asChild
-            className="rounded-sm bg-[#c05621] hover:bg-[#dd6b20] text-white"
-          >
-            <Link href="/">
-              <Home className="mr-2 h-4 w-4" />
-              Back to Home
-            </Link>
-          </Button>
-        </div>
-      </div>
-    </div>
+          </p>
+        </main>
+      </body>
+    </html>
   );
 }

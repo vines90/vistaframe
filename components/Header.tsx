@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  ChevronDown,
   Mail,
   Menu,
   MessageCircle,
@@ -25,32 +24,23 @@ import {
   NavigationMenuLink,
   NavigationMenuList,
   NavigationMenuTrigger,
-  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { SearchDialog } from "@/components/SearchDialog";
 import { cn } from "@/lib/utils";
 import { siteConfig } from "@/content/site";
-import { companyMenu, productsMega } from "@/content/navigation-extended";
+import type { Locale } from "@/content/i18n";
+import type { Dictionary } from "@/content/i18n/types";
 
-function UkFlag({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 60 34" width="26" height="14" aria-hidden xmlns="http://www.w3.org/2000/svg">
-      <path fill="#012169" d="M0 0h60v34H0z" />
-      <path fill="#FFF" d="m0 0 60 34M60 0 0 34" stroke="#FFF" strokeWidth="12" strokeLinecap="square" />
-      <path fill="none" stroke="#C8102E" strokeWidth="6.5" d="m0 0 60 34M60 0 0 34" strokeLinecap="square" />
-      <path stroke="#FFF" strokeWidth="16" strokeLinecap="square" d="M30 0v34M0 17h60" />
-      <path stroke="#C8102E" strokeWidth="10" strokeLinecap="square" d="M30 0v34M0 17h60" />
-    </svg>
-  );
-}
+type Props = { dict: Dictionary; locale: Locale };
 
-export function Header() {
-  const pathname = usePathname();
-  const isHome = pathname === "/";
+export function Header({ dict, locale }: Props) {
+  const pathname = usePathname() ?? "/";
+  const isHome = pathname === `/${locale}` || pathname === "/";
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
   const heroOverlay = isHome && !scrolled;
-  /** Show DERCHy-style tier-1 strips after scroll or Off home */
   const showUtilityTier = !isHome || scrolled;
 
   useEffect(() => {
@@ -60,18 +50,39 @@ export function Header() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const lp = (path: string) => `/${locale}${path === "/" ? "" : path}`;
+
+  const productCats = [
+    { id: "doors", items: dict.productsSection.categories.doors.products },
+    { id: "windows", items: dict.productsSection.categories.windows.products },
+    { id: "sunroom", items: dict.productsSection.categories.sunroom.products },
+    {
+      id: "wooden-doors",
+      items: dict.productsSection.categories["wooden-doors"].products,
+    },
+  ] as const;
+
+  const companyMenu = [
+    { name: dict.nav.about, href: lp("/about") },
+    { name: dict.nav.certifications, href: lp("/resources/certifications") },
+    { name: dict.nav.faqs, href: lp("/resources/faqs") },
+    { name: dict.nav.contact, href: lp("/contact") },
+  ];
+
   return (
     <header
       className="sticky top-0 z-50 w-full"
       data-hero-overlay={heroOverlay ? "true" : undefined}
     >
-      {/* Top utility — hidden atop homepage so Hero reads full-bleed like reference */}
       {showUtilityTier ? (
         <div className="hidden border-b border-white/10 bg-[var(--derchi-dark)] text-[11px] text-stone-400 sm:block">
           <div className="container mx-auto flex flex-wrap items-center justify-between gap-x-6 gap-y-1 px-4 py-2 lg:px-8">
             <div className="flex flex-wrap items-center gap-x-5 gap-y-1">
               <span className="inline-flex items-center gap-1.5 font-medium tracking-wide">
-                <MessageCircle className="h-3.5 w-3.5 text-[var(--accent-gold)]/90" aria-hidden />
+                <MessageCircle
+                  className="h-3.5 w-3.5 text-[var(--accent-gold)]/90"
+                  aria-hidden
+                />
                 WhatsApp Live Chat
               </span>
               <a
@@ -83,8 +94,11 @@ export function Header() {
               </a>
             </div>
             <p className="text-[var(--accent-gold)]/85">
-              Need a project quote?
-              <span className="text-stone-500"> — fast reply within business hours.</span>
+              {dict.hero.floatingQuoteLead}
+              <span className="text-stone-500">
+                {" "}
+                — {dict.hero.floatingQuoteSub}
+              </span>
             </p>
           </div>
         </div>
@@ -102,7 +116,7 @@ export function Header() {
         )}
       >
         <div className="container mx-auto flex h-[4.125rem] items-center justify-between gap-4 px-4 lg:px-8">
-          <Link href="/" className="flex shrink-0 items-center gap-2.5">
+          <Link href={lp("/")} className="flex shrink-0 items-center gap-2.5">
             <div
               className={cn(
                 "flex h-9 w-9 items-center justify-center text-sm font-black tracking-tighter transition-colors",
@@ -116,7 +130,9 @@ export function Header() {
             <span
               className={cn(
                 "text-lg font-semibold uppercase tracking-[0.12em]",
-                heroOverlay ? "text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)]" : "text-neutral-950",
+                heroOverlay
+                  ? "text-white drop-shadow-[0_1px_12px_rgba(0,0,0,0.45)]"
+                  : "text-neutral-950",
               )}
             >
               {siteConfig.name}
@@ -127,15 +143,15 @@ export function Header() {
             <NavigationMenu>
               <NavigationMenuList className="flex-nowrap gap-0 text-[11px] font-semibold uppercase tracking-wide">
                 <NavigationMenuItem>
-                  <Link href="/" legacyBehavior passHref>
+                  <Link href={lp("/")} legacyBehavior passHref>
                     <NavigationMenuLink
                       className={cn(
                         "derchi-nav-link h-10 !bg-transparent px-2 italic data-[active]:bg-transparent",
-                        pathname === "/" && heroOverlay && "border-b-2 border-white pb-0.5",
-                        pathname === "/" && !heroOverlay && "border-b-2 border-amber-700 pb-0.5",
+                        isHome && heroOverlay && "border-b-2 border-white pb-0.5",
+                        isHome && !heroOverlay && "border-b-2 border-amber-700 pb-0.5",
                       )}
                     >
-                      Home
+                      {dict.nav.home}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -147,36 +163,44 @@ export function Header() {
                       heroOverlay && "hero-nav-trigger",
                     )}
                   >
-                    Products
+                    {dict.nav.products}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent className="left-1/2 -translate-x-1/2 xl:left-0 xl:translate-x-0">
                     <div className="grid w-[min(92vw,44rem)] gap-8 border border-stone-200 bg-white p-6 shadow-xl md:w-[640px] md:grid-cols-2">
-                      {productsMega.map((cat) => (
-                        <div key={cat.category} className="min-h-[140px]">
-                          <Link
-                            href={cat.href}
-                            className="text-[15px] font-semibold text-neutral-950 hover:text-amber-800"
-                          >
-                            {cat.category}
-                          </Link>
-                          {cat.items.length ? (
-                            <ul className="mt-3 space-y-2 border-l-2 border-amber-600/70 pl-3">
-                              {cat.items.map((sub) => (
-                                <li key={sub}>
-                                  <Link
-                                    href={cat.href}
-                                    className="text-sm italic text-stone-600 transition-colors hover:text-amber-800"
-                                  >
-                                    {sub}
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                          ) : (
-                            <p className="mt-2 text-sm text-stone-500">Solutions & specifications</p>
-                          )}
-                        </div>
-                      ))}
+                      {productCats.map((cat) => {
+                        const c =
+                          dict.productsSection.categories[
+                            cat.id as keyof typeof dict.productsSection.categories
+                          ];
+                        return (
+                          <div key={cat.id} className="min-h-[140px]">
+                            <Link
+                              href={lp(`/products/${cat.id}`)}
+                              className="text-[15px] font-semibold text-neutral-950 hover:text-amber-800"
+                            >
+                              {c.name}
+                            </Link>
+                            {cat.items.length ? (
+                              <ul className="mt-3 space-y-2 border-l-2 border-amber-600/70 pl-3">
+                                {cat.items.map((sub) => (
+                                  <li key={sub}>
+                                    <Link
+                                      href={lp(`/products/${cat.id}`)}
+                                      className="text-sm italic text-stone-600 transition-colors hover:text-amber-800"
+                                    >
+                                      {sub}
+                                    </Link>
+                                  </li>
+                                ))}
+                              </ul>
+                            ) : (
+                              <p className="mt-2 text-sm text-stone-500">
+                                {c.tagline}
+                              </p>
+                            )}
+                          </div>
+                        );
+                      })}
                     </div>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
@@ -188,10 +212,10 @@ export function Header() {
                       heroOverlay && "hero-nav-trigger",
                     )}
                   >
-                    Company
+                    {dict.nav.about}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[220px] gap-1 border border-stone-200 bg-white p-3 shadow-lg">
+                    <ul className="grid w-[240px] gap-1 border border-stone-200 bg-white p-3 shadow-lg">
                       {companyMenu.map((item) => (
                         <li key={item.name}>
                           <NavigationMenuLink asChild>
@@ -209,11 +233,9 @@ export function Header() {
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/projects" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className="derchi-nav-link h-10 !bg-transparent px-2 italic data-[active]:bg-transparent"
-                    >
-                      Project
+                  <Link href={lp("/projects")} legacyBehavior passHref>
+                    <NavigationMenuLink className="derchi-nav-link h-10 !bg-transparent px-2 italic data-[active]:bg-transparent">
+                      {dict.nav.projects}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -225,42 +247,38 @@ export function Header() {
                       heroOverlay && "hero-nav-trigger",
                     )}
                   >
-                    Resources
+                    {dict.nav.resources}
                   </NavigationMenuTrigger>
                   <NavigationMenuContent>
-                    <ul className="grid w-[220px] gap-1 border border-stone-200 bg-white p-3 shadow-lg">
-                      {siteConfig.navigation.resources.map((r) => (
-                        <li key={r.href}>
-                          <NavigationMenuLink asChild>
-                            <Link
-                              href={r.href}
-                              className="block rounded-none px-3 py-2 text-sm italic text-stone-700 hover:bg-stone-100"
-                            >
-                              {r.name}
-                            </Link>
-                          </NavigationMenuLink>
-                        </li>
-                      ))}
+                    <ul className="grid w-[240px] gap-1 border border-stone-200 bg-white p-3 shadow-lg">
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={lp("/resources/faqs")}
+                            className="block rounded-none px-3 py-2 text-sm italic text-stone-700 hover:bg-stone-100"
+                          >
+                            {dict.nav.faqs}
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
+                      <li>
+                        <NavigationMenuLink asChild>
+                          <Link
+                            href={lp("/resources/certifications")}
+                            className="block rounded-none px-3 py-2 text-sm italic text-stone-700 hover:bg-stone-100"
+                          >
+                            {dict.nav.certifications}
+                          </Link>
+                        </NavigationMenuLink>
+                      </li>
                     </ul>
                   </NavigationMenuContent>
                 </NavigationMenuItem>
 
                 <NavigationMenuItem>
-                  <Link href="/contact" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className="derchi-nav-link h-10 !bg-transparent px-2 italic data-[active]:bg-transparent"
-                    >
-                      Partner
-                    </NavigationMenuLink>
-                  </Link>
-                </NavigationMenuItem>
-
-                <NavigationMenuItem>
-                  <Link href="/contact" legacyBehavior passHref>
-                    <NavigationMenuLink
-                      className="derchi-nav-link h-10 !bg-transparent px-2 italic data-[active]:bg-transparent"
-                    >
-                      Contact
+                  <Link href={lp("/contact")} legacyBehavior passHref>
+                    <NavigationMenuLink className="derchi-nav-link h-10 !bg-transparent px-2 italic data-[active]:bg-transparent">
+                      {dict.nav.contact}
                     </NavigationMenuLink>
                   </Link>
                 </NavigationMenuItem>
@@ -268,39 +286,30 @@ export function Header() {
             </NavigationMenu>
           </nav>
 
-          <div className={cn("hidden shrink-0 items-center gap-1.5 lg:flex")}>
-            <button
-              type="button"
-              aria-label="Search website"
-              className={cn(
-                "rounded-none p-2 transition-[background,color]",
-                heroOverlay
-                  ? "border border-white/35 bg-black/35 text-white hover:bg-white/10"
-                  : "border border-stone-300 text-neutral-950 hover:bg-stone-100",
-              )}
-            >
-              <Search className={cn("h-4 w-4 shrink-0", heroOverlay && "text-white")} />
-            </button>
+          <div className="hidden shrink-0 items-center gap-1.5 lg:flex">
+            <SearchDialog
+              dict={dict}
+              locale={locale}
+              trigger={
+                <button
+                  type="button"
+                  aria-label={dict.search.open}
+                  className={cn(
+                    "rounded-none p-2 transition-[background,color]",
+                    heroOverlay
+                      ? "border border-white/35 bg-black/35 text-white hover:bg-white/10"
+                      : "border border-stone-300 text-neutral-950 hover:bg-stone-100",
+                  )}
+                >
+                  <Search className="h-4 w-4 shrink-0" />
+                </button>
+              }
+            />
 
-            <button
-              type="button"
-              className={cn(
-                "hidden cursor-default items-center gap-1 rounded-none border-none bg-transparent uppercase tracking-wide lg:flex lg:text-[11px]",
-                heroOverlay ? "border border-white/12 px-2 py-1.5 text-white" : "px-2 py-1.5 text-neutral-950",
-              )}
-            >
-              <span className="overflow-hidden rounded-[2px] shadow-sm ring-[0.25px] ring-black/35">
-                <UkFlag />
-              </span>
-              <span className="hidden xl:inline">English</span>
-              <span className="xl:hidden">EN</span>
-              <ChevronDown
-                className={cn(
-                  "h-3 w-3",
-                  heroOverlay ? "text-white" : "text-neutral-900",
-                )}
-              />
-            </button>
+            <LanguageSwitcher
+              current={locale}
+              variant={heroOverlay ? "light" : "dark"}
+            />
 
             <a
               href={`tel:${siteConfig.links.phone}`}
@@ -324,11 +333,15 @@ export function Header() {
                   : "bg-[var(--derchi-dark)] text-white shadow-sm ring-2 ring-transparent hover:bg-neutral-900",
               )}
             >
-              <Link href="/contact">Inquiry</Link>
+              <Link href={lp("/contact")}>{dict.nav.inquiry}</Link>
             </Button>
           </div>
 
           <div className="flex items-center gap-2 xl:hidden">
+            <LanguageSwitcher
+              current={locale}
+              variant={heroOverlay ? "light" : "dark"}
+            />
             <Button
               asChild
               variant="outline"
@@ -340,7 +353,7 @@ export function Header() {
                   : "border-neutral-950",
               )}
             >
-              <Link href="/contact">Inquiry</Link>
+              <Link href={lp("/contact")}>{dict.nav.inquiry}</Link>
             </Button>
             <Sheet open={isOpen} onOpenChange={setIsOpen}>
               <SheetTrigger asChild>
@@ -349,47 +362,86 @@ export function Header() {
                   size="icon"
                   className={cn(
                     "h-9 w-9 rounded-none",
-                    heroOverlay ? "border-white/45 bg-black/35 text-white" : "border-stone-300",
+                    heroOverlay
+                      ? "border-white/45 bg-black/35 text-white"
+                      : "border-stone-300",
                   )}
                 >
                   <Menu className="h-5 w-5" />
-                  <span className="sr-only">Menu</span>
+                  <span className="sr-only">{dict.nav.search}</span>
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-[min(100vw,20rem)] border-stone-200 bg-stone-50 p-6">
+              <SheetContent
+                side="right"
+                className="w-[min(100vw,20rem)] border-stone-200 bg-stone-50 p-6"
+              >
                 <SheetTitle className="text-left font-semibold uppercase tracking-widest">
-                  VistaFrame Menu
+                  VistaFrame
                 </SheetTitle>
-                <div className="mt-8 flex flex-col gap-6 text-[15px]">
-                  <Link href="/" className="italic" onClick={() => setIsOpen(false)}>
-                    Home
+                <div className="mt-8 flex flex-col gap-5 text-[15px]">
+                  <Link
+                    href={lp("/")}
+                    className="italic"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {dict.nav.home}
                   </Link>
                   <div className="space-y-2">
-                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800">Products</p>
+                    <p className="text-xs font-semibold uppercase tracking-[0.2em] text-amber-800">
+                      {dict.nav.products}
+                    </p>
                     <div className="space-y-2 border-l-2 border-amber-700/60 pl-3">
-                      {productsMega.map((c) => (
-                        <Link
-                          key={c.category}
-                          href={c.href}
-                          className="block italic text-stone-700"
-                          onClick={() => setIsOpen(false)}
-                        >
-                          {c.category}
-                        </Link>
-                      ))}
+                      {productCats.map((c) => {
+                        const cat =
+                          dict.productsSection.categories[
+                            c.id as keyof typeof dict.productsSection.categories
+                          ];
+                        return (
+                          <Link
+                            key={c.id}
+                            href={lp(`/products/${c.id}`)}
+                            className="block italic text-stone-700"
+                            onClick={() => setIsOpen(false)}
+                          >
+                            {cat.name}
+                          </Link>
+                        );
+                      })}
                     </div>
                   </div>
                   {companyMenu.map((item) => (
-                    <Link key={item.name} href={item.href} className="italic" onClick={() => setIsOpen(false)}>
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className="italic"
+                      onClick={() => setIsOpen(false)}
+                    >
                       {item.name}
                     </Link>
                   ))}
-                  <Link href="/projects" className="italic" onClick={() => setIsOpen(false)}>
-                    Project
+                  <Link
+                    href={lp("/projects")}
+                    className="italic"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {dict.nav.projects}
                   </Link>
-                  <Link href="/contact" className="italic" onClick={() => setIsOpen(false)}>
-                    Contact Us / Be A Partner
+                  <Link
+                    href={lp("/contact")}
+                    className="italic"
+                    onClick={() => setIsOpen(false)}
+                  >
+                    {dict.nav.contact}
                   </Link>
+
+                  <div className="mt-4 border-t border-stone-200 pt-4">
+                    <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-stone-500">
+                      {dict.nav.language}
+                    </p>
+                    <div className="mt-3">
+                      <LanguageSwitcher current={locale} />
+                    </div>
+                  </div>
                 </div>
               </SheetContent>
             </Sheet>
