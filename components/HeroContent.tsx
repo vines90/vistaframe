@@ -2,7 +2,12 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-import { motion, useReducedMotion } from "framer-motion";
+import {
+  motion,
+  useReducedMotion,
+  type MotionProps,
+  type Variants,
+} from "framer-motion";
 import type { HeroDict } from "@/content/i18n/types";
 import type { Locale } from "@/content/i18n";
 
@@ -10,38 +15,39 @@ const ease = [0.22, 1, 0.36, 1] as const;
 
 type Props = { dict: HeroDict; locale: Locale };
 
+const wrapperVariants: Variants = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
+};
+
+const itemVariants: Variants = {
+  hidden: { opacity: 0, x: 20 },
+  visible: { opacity: 1, x: 0, transition: { duration: 0.55, ease } },
+};
+
 export function HeroContent({ dict, locale }: Props) {
   const reduce = useReducedMotion();
   const lp = (path: string) => `/${locale}${path === "/" ? "" : path}`;
 
-  const Wrapper: any = reduce ? "div" : motion.div;
-  const wrapperProps = reduce
-    ? { className: "ml-auto w-full max-w-[min(100%,30rem)] text-right xl:max-w-[36rem]" }
-    : {
-        className: "ml-auto w-full max-w-[min(100%,30rem)] text-right xl:max-w-[36rem]",
-        initial: "hidden",
-        animate: "visible",
-        variants: {
-          hidden: {},
-          visible: { transition: { staggerChildren: 0.08, delayChildren: 0.1 } },
-        },
-      };
+  const wrapperClass =
+    "ml-auto w-full max-w-[min(100%,30rem)] text-right xl:max-w-[36rem]";
 
-  const Item: any = reduce ? "div" : motion.div;
-  const itemFromRight = reduce
+  const wrapperMotion: MotionProps = reduce
     ? {}
-    : { variants: { hidden: { opacity: 0, x: 20 }, visible: { opacity: 1, x: 0, transition: { duration: 0.55, ease } } } };
+    : { initial: "hidden", animate: "visible", variants: wrapperVariants };
+
+  const itemMotion: MotionProps = reduce ? {} : { variants: itemVariants };
 
   return (
-    <Wrapper {...wrapperProps}>
-      <Item {...itemFromRight}>
+    <motion.div className={wrapperClass} {...wrapperMotion}>
+      <motion.div {...itemMotion}>
         <p className="mb-4 inline-flex items-center justify-end gap-2 text-[10px] font-semibold uppercase tracking-[0.32em] text-[var(--accent-gold)]">
           <span className="h-px w-8 bg-[var(--accent-gold)]/60" aria-hidden />
           {dict.eyebrow}
         </p>
-      </Item>
+      </motion.div>
 
-      <Item {...itemFromRight}>
+      <motion.div {...itemMotion}>
         <h1 className="font-semibold uppercase leading-[0.92] tracking-[0.04em] text-white">
           <span className="metallic-gold block text-[clamp(2.25rem,5.6vw,4rem)]">
             {dict.titleAccent}
@@ -50,15 +56,15 @@ export function HeroContent({ dict, locale }: Props) {
             {dict.titleRest}
           </span>
         </h1>
-      </Item>
+      </motion.div>
 
-      <Item {...itemFromRight}>
+      <motion.div {...itemMotion}>
         <p className="mr-0 ml-auto mt-6 max-w-[26rem] text-[clamp(11px,1.95vw,13px)] font-medium leading-snug tracking-[0.06em] text-white/88 xl:max-w-[32rem] xl:text-[14px]">
           {dict.subtitle}
         </p>
-      </Item>
+      </motion.div>
 
-      <Item {...itemFromRight}>
+      <motion.div {...itemMotion}>
         <div className="mt-8 flex flex-wrap justify-end gap-3">
           <Link
             href={lp("/contact")}
@@ -74,9 +80,9 @@ export function HeroContent({ dict, locale }: Props) {
             {dict.secondaryCta}
           </Link>
         </div>
-      </Item>
+      </motion.div>
 
-      <Item {...itemFromRight}>
+      <motion.div {...itemMotion}>
         <ul className="mt-10 grid grid-cols-3 gap-3 border border-white/15 bg-black/35 p-3 backdrop-blur-md sm:grid-cols-3">
           {dict.kpis.map((k) => (
             <li
@@ -92,7 +98,7 @@ export function HeroContent({ dict, locale }: Props) {
             </li>
           ))}
         </ul>
-      </Item>
-    </Wrapper>
+      </motion.div>
+    </motion.div>
   );
 }

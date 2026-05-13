@@ -11,6 +11,7 @@ import {
   replaceLocaleInPath,
   type Locale,
 } from "@/content/i18n";
+import { setCookie } from "@/lib/cookies";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -27,9 +28,7 @@ export function LanguageSwitcher({ current, variant = "dark" }: Props) {
   const onPick = (target: Locale) => {
     setOpen(false);
     if (target === current) return;
-    document.cookie = `NEXT_LOCALE=${target}; path=/; max-age=${
-      60 * 60 * 24 * 365
-    }; SameSite=Lax`;
+    setCookie("NEXT_LOCALE", target);
     const next = replaceLocaleInPath(pathname, target);
     startTransition(() => {
       router.push(next);

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { ArrowLeft, ArrowRight, Calendar, MapPin, Tag } from "lucide-react";
+import { ArrowLeft, Calendar, MapPin, Tag } from "lucide-react";
 import { Lightbox } from "@/components/Lightbox";
 import { projects } from "@/content/projects";
 import {
@@ -33,7 +33,6 @@ export async function generateMetadata({
   const locale: Locale = isLocale(rawLocale) ? rawLocale : defaultLocale;
   const project = projects.find((p) => p.id === id);
   if (!project) return {};
-  const dict = getDict(locale);
 
   const languages: Record<string, string> = {
     "x-default": `/${defaultLocale}/projects/${id}`,
