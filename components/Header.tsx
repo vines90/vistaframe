@@ -165,7 +165,7 @@ export function Header({ dict, locale }: Props) {
                   >
                     {dict.nav.products}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-1 w-[min(92vw,44rem)] md:w-[640px]">
+                  <NavigationMenuContent className="w-[min(92vw,44rem)] md:w-[640px]">
                     <div className="grid gap-8 border border-stone-200 bg-white p-6 shadow-xl md:grid-cols-2">
                       {productCats.map((cat) => {
                         const c =
@@ -214,7 +214,7 @@ export function Header({ dict, locale }: Props) {
                   >
                     {dict.nav.about}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-1">
+                  <NavigationMenuContent>
                     <ul className="grid w-[240px] gap-1 border border-stone-200 bg-white p-3 shadow-lg">
                       {companyMenu.map((item) => (
                         <li key={item.name}>
@@ -249,7 +249,7 @@ export function Header({ dict, locale }: Props) {
                   >
                     {dict.nav.resources}
                   </NavigationMenuTrigger>
-                  <NavigationMenuContent className="absolute top-full left-0 mt-1">
+                  <NavigationMenuContent>
                     <ul className="grid w-[240px] gap-1 border border-stone-200 bg-white p-3 shadow-lg">
                       <li>
                         <NavigationMenuLink asChild>
